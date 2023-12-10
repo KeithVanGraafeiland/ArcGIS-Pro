@@ -1,0 +1,13 @@
+## This script shifts the coordinates in a specified feature class by a set distance
+
+## Helpers
+## https://gis.stackexchange.com/questions/293102/changing-coordinate-of-point-shapefile-in-arcgis-using-arcpy
+
+import arcpy
+in_features = 'Pointlayer' #Change to match your layer name
+x_shift = 1
+y_shift = 1
+with arcpy.da.UpdateCursor(in_features, ['SHAPE@XY']) as cursor:
+    for row in cursor:
+        cursor.updateRow([[row[0][0] + (x_shift),
+                           row[0][1] + (y_shift)]])

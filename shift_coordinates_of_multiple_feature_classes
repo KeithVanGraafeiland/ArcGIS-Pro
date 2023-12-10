@@ -1,0 +1,20 @@
+## This script shifts all the coordinates in a list of feature classes in a GDB by a set distance
+
+## Helpers
+## https://pro.arcgis.com/en/pro-app/latest/arcpy/functions/listfeatureclasses.htm
+## https://gis.stackexchange.com/questions/293102/changing-coordinate-of-point-shapefile-in-arcgis-using-arcpy
+
+import os
+import arcpy
+arcpy.env.workspace = r'C:\Users\keit8223\Documents\ArcGIS\Projects\OceanVisions\Analysis\GFW\fleet\GFW_Fleet_shift.gdb'
+
+featureclasses = arcpy.ListFeatureClasses(wild_card='csv*', feature_type='Point')
+x_shift = 0.005
+y_shift = 0.005
+
+for fc in featureclasses:
+    print("processing " + fc)
+    with arcpy.da.UpdateCursor(fc, ['SHAPE@XY']) as cursor:
+        for row in cursor:
+            cursor.updateRow([[row[0][0] + (x_shift),
+                               row[0][1] + (y_shift)]])
